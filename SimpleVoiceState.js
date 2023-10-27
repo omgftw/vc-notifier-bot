@@ -39,11 +39,7 @@ class SimpleVoiceState {
   }
 
   isActive() {
-    if (this.voiceState.channelID) {
-      return true;
-    } else {
-      return false;
-    }
+    return !!this.voiceState.channelID;
   }
 }
 

@@ -42,7 +42,7 @@ const {
   guildNotifiedJoinsMemberIDs, // and for just joins
 } = getVariableDataFromFile(VARIABLE_DATA_FILE_PATH);
 
-const sentNewVersionFeaturesMessage = false;
+let sentNewVersionFeaturesMessage = false;
 
 client.on('ready', async () => {
   console.log(`Logged in as '${client.user.tag}'.`);
@@ -63,8 +63,9 @@ client.on('ready', async () => {
     sentNewVersionFeaturesMessage = true;
   }
 
-  client.user.setStatus('available');
-  client.user.setActivity('vc!help for help', { type: 'WATCHING' });
+  let p1 = client.user.setStatus('available');
+  let p2 = client.user.setActivity('vc!help for help', { type: 'WATCHING' });
+  await Promise.all([p1, p2]);
 });
 
 client.on('voiceStateUpdate', async (oldState, newState) => {
@@ -321,9 +322,7 @@ const createAndGetNotificationChannel = async (guildID) => {
       reason: DEFAULT_NOTIFICATION_CHANNEL_CREATION_DESCRIPTION,
     });
 
-    const notificationChannelID = notificationChannel.id;
-
-    guildNotificationChannels[guildID] = notificationChannelID;
+    guildNotificationChannels[guildID] = notificationChannel.id;
 
     return getNotificationChannel(guildID);
   } else {
